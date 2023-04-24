@@ -61,23 +61,21 @@ function HoloCatalogue:OnDocLoaded()
 		end
 		
 		self.wndMannequin = self.wndMain:FindChild("CostumeWindow")
-		if self.wndMannequin == nil then
-			Apollo.AddAddonErrorText(self, "Could not load the main window for some reason.")
-			return
-		end
-		
 		self.wndCostumeList = self.wndMain:FindChild("CostumeList")
-		if self.wndCostumeList == nil then
-			Apollo.AddAddonErrorText(self, "Could not load the main window for some reason.")
-			return
-		end
-		
 		self.wndNameEditBox = self.wndMain:FindChild("NameEditBox")
-		if self.wndNameEditBox == nil then
+		self.wndCostumeSlotsFrame = self.wndMain:FindChild("CostumeSlotListFrame")
+		self.wndCostumeSlotsContainer = self.wndMain:FindChild("CostumeSlotListContainer")
+		if self.wndMannequin == nil or self.wndCostumeList == nil or self.wndNameEditBox == nil or self.wndCostumeSlotsFrame == nil or self.wndCostumeSlotsContainer == nil then
 			Apollo.AddAddonErrorText(self, "Could not load the main window for some reason.")
 			return
 		end
-		
+
+		for i = -1, 12 do
+			local slot = Apollo.LoadForm(self.xmlDoc, "DropdownCostumeSlot", self.wndCostumeSlotsContainer, self)
+			local button = slot:FindChild("DropdownCostumeSlotButton")
+			button:SetText("Costume " .. i)
+		end
+		self.wndCostumeSlotsContainer:ArrangeChildrenVert(1)
 		
 	    self.wndMain:Show(false, true)
 	
@@ -136,6 +134,8 @@ function HoloCatalogue:SelectionChanged(selection)
 	self:UpdatePreview()
 end
 
+function HoloCatalogue:OnCostumeSlotClick( wndHandler, wndControl, eMouseButton )
+end
 
 -----------------------------------------------------------------------------------------------
 -- StoredCostume Functions
@@ -154,7 +154,6 @@ end
 function StoredCostume:SetCostume()
 	
 end
-
 
 -----------------------------------------------------------------------------------------------
 -- HoloCatalogue Instance
